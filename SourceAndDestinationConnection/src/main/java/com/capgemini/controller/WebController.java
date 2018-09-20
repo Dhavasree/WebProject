@@ -15,6 +15,8 @@ import com.capgemini.model.Destination;
 import com.capgemini.model.DestinationJsonResponse;
 import com.capgemini.model.Source;
 import com.capgemini.model.SourceJsonResponse;
+import com.capgemini.model.Table;
+import com.capgemini.model.TableJsonResponse;
 
 @Controller
 public class WebController {
@@ -70,6 +72,14 @@ public class WebController {
 	{
 		return "table";
 		
+	}
+	@RequestMapping("/alltable")
+	public @ResponseBody TableJsonResponse login(@ModelAttribute Table table, BindingResult result){
+		TableJsonResponse response = new TableJsonResponse();
+		response.setValidated(true);
+		response.setTable(table);
+		System.out.println(table.getClause());
+		return response;
 	}
 
 }
