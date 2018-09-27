@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <title>Connection</title>
 
 <style type="text/css">
@@ -52,8 +53,8 @@ $(document).ready(function() {
 	    e.preventDefault();
 	    var count=0;
 	    var driverName = $('#driverName').val();
-	    var connectionString = $('#connectionString').val();
-	    var userName = $('#userName').val();
+	    var connectionURL = $('#connectionURL').val();
+	    var userId = $('#userId').val();
 	    var password = $('#password').val();
 
 	    $(".error").remove();
@@ -62,12 +63,12 @@ $(document).ready(function() {
 	      $('#driverName').after('<span class="error">This field is required</span>');
 	      count=1;
 	    }
-	    if (connectionString.length < 1) {
-	      $('#connectionString').after('<span class="error">This field is required</span>');
+	    if (connectionURL.length < 1) {
+	      $('#connectionURL').after('<span class="error">This field is required</span>');
 	      count=1;
 	    }
-	    if (userName.length < 1) {
-	      $('#userName').after('<span class="error">This field is required</span>');
+	    if (userId.length < 1) {
+	      $('#userId').after('<span class="error">This field is required</span>');
 	      count=1;
 	    }
 	    if (password !="") {
@@ -77,16 +78,16 @@ $(document).ready(function() {
 	    if(count==0)
 	    	{
 	    	sourceFunction();
-	    	destinationfunction();
+	    	//destinationfunction();
 	    	}
 	  });
 	  $('#destinationTable').submit(function(e) {
 		    e.preventDefault();
 		    var count=0;
-		    var driverName = $('#DdriverName').val();
-		    var connectionString = $('#DconnectionString').val();
-		    var userName = $('#DuserName').val();
-		    var password = $('#Dpassword').val();
+		    var driverName = $('#driverName').val();
+		    var connectionURL = $('#connectionURL').val();
+		    var userId = $('#userId').val();
+		    var password = $('#password').val();
 
 		    $(".error").remove();
 
@@ -94,12 +95,12 @@ $(document).ready(function() {
 		      $('#DdriverName').after('<span class="error">This field is required</span>');
 		      count=1;
 		    }
-		    if (connectionString.length < 1) {
-		      $('#DconnectionString').after('<span class="error">This field is required</span>');
+		    if (connectionURL.length < 1) {
+		      $('#connectionURL').after('<span class="error">This field is required</span>');
 		      count=1;
 		    }
-		    if (userName.length < 1) {
-		      $('#DuserName').after('<span class="error">This field is required</span>');
+		    if (userId.length < 1) {
+		      $('#DuserId').after('<span class="error">This field is required</span>');
 		      count=1;
 		    }
 		    if (password !="") {
@@ -116,7 +117,7 @@ $(document).ready(function() {
 	function sourceFunction() {
 		$.ajax({
 			type : 'post',
-			url : 'loginSource',
+			url : 'SourceConn',
 			data : $('form[name="sourceconnection"]').serialize(),
 			success : function(response) {
 				if (response.validated) {
@@ -132,13 +133,14 @@ $(document).ready(function() {
 	function DestinationFunction() {
 		$.ajax({
 			type : 'post',
-			url : 'loginDestination',
+			url : 'DestinationConn',
 			data : $('form[name="destinationconnection"]').serialize(),
 			success : function(response) {
 				if (response.validated) {
 					//Set response				
 					$('#resultContainer1 pre code').text(
 							JSON.stringify(response.destination));
+					$('#resultContainer').hide();
 					$('#resultContainer1').show();
 				}
 			}
@@ -148,30 +150,67 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<hr />
-	<form id="sourceTable" name="sourceconnection">
-		<div class="container" id="source">
-			<h1 align="center">Source</h1>
-			<div id="resultContainer" style="display: none;">
+<div id="resultContainer" style="display: none;">
 
-				<h4 style="color: green;">Connected Successfully</h4>
+				<h4 style="color: green;">Source Connected Successfully</h4>
+				<pre style="color: green;">
+    <code></code>
+   </pre>
+			</div>
+	<div id="resultContainer1" style="display: none;">
+
+				<h4 style="color: green;">Source and Destination Connected Successfully</h4>
 				<pre style="color: green;">
     <code></code>
    </pre>
 				<hr />
 			</div>
+			<div class="container" >
+ 
+<div class="span6">
+	<form:form id="sourceTable" modelAttribute="source" name="sourceconnection" class="form-signin">
+		<div id="source">
+			<h1 align="center">Source</h1>
 			<div class="form-group">
 				<label for="driverName">DriverName:</label> <input type="text"
 					name="driverName" id="driverName" value="org.h2.Driver" />
 			</div>
 			<div class="form-group">
-				<label for="connectionString">connectionString:</label> <input
-					type="text" name="connectionString" id="connectionString"
+				<label for="connectionURL">connectionURL:</label> <input
+					type="text" name="connectionURL" id="connectionURL"
 					value="jdbc:h2:tcp://localhost/~/test" />
 			</div>
 			<div class="form-group">
-				<label for="userName">userName:</label> <input type="text"
-					name="userName" id="userName" value="sa" />
+				<label for="userId">userId:</label> <input type="text"
+					name="userId" id="userId" value="sa" />
+			</div>
+			<div class="form-group">
+				<label for="password">password:</label> <input type="password"
+					name="password" id="password" value="" />
+			</div>
+			<button type="submit"
+				class="btn btn-success">Connect</button>
+
+		</div>
+	</form:form>
+	</div>
+ 
+ <div class="span6">
+	<form id="destinationTable" name="destinationconnection" class="form-signin">
+		<div  id="destination">
+			<h1 align="center">Destination</h1>
+			<div class="form-group">
+				<label for="driverName">DriverName:</label> <input type="text"
+					name="driverName" id="DdriverName" value="org.h2.Driver" />
+			</div>
+			<div class="form-group">
+				<label for="connectionURL">connectionURL:</label> <input
+					type="text" name="connectionURL" id="connectionURL"
+					value="jdbc:h2:tcp://localhost/~/test" />
+			</div>
+			<div class="form-group">
+				<label for="userId">userId:</label> <input type="text"
+					name="userId" id="userId" value="sa" />
 			</div>
 			<div class="form-group">
 				<label for="password">password:</label> <input type="password"
@@ -182,39 +221,10 @@ $(document).ready(function() {
 
 		</div>
 	</form>
-	<form id="destinationTable" name="destinationconnection">
-		<div class="container" id="destination">
-			<h1 align="center">Destination</h1>
-			<div id="resultContainer1" style="display: none;">
-
-				<h4 style="color: green;">Connected Successfully</h4>
-				<pre style="color: green;">
-    <code></code>
-   </pre>
-				<hr />
-			</div>
-			<div class="form-group">
-				<label for="DdriverName">DriverName:</label> <input type="text"
-					name="DdriverName" id="DdriverName" value="org.h2.Driver" />
-			</div>
-			<div class="form-group">
-				<label for="DconnectionString">connectionString:</label> <input
-					type="text" name="DconnectionString" id="DconnectionString"
-					value="jdbc:h2:tcp://localhost/~/test" />
-			</div>
-			<div class="form-group">
-				<label for="DuserName">userName:</label> <input type="text"
-					name="DuserName" id="DuserName" value="sa" />
-			</div>
-			<div class="form-group">
-				<label for="Dpassword">password:</label> <input type="password"
-					name="Dpassword" id="Dpassword" value="" />
-			</div>
-			<button type="submit"
-				class="btn btn-success">Connect</button>
-
-		</div>
-	</form>
+	 
+</div>
+ 
+</div>
 	<form action="table" id="table">
 	<div class="container" align="center" id="table">
 	<button type="submit" class="btn btn-success">Table</button>
