@@ -190,7 +190,7 @@ function DestinationFunction() {
 	</form:form>
 	</div>
 	
-	<h1 align="center">Click on the table button</h1>
+	<h1 align="center">To Enter Table details...Click here</h1>
 <form action="table" id="table">
 	<div class="container" align="center" id="table">
 	<button type="submit" class="btn btn-success">Table</button>

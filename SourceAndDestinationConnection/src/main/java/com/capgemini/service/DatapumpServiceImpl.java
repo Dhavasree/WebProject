@@ -28,7 +28,7 @@ public class DatapumpServiceImpl implements DatapumpService{
 
 	
 	@Override
-	public String transferData(List<MappingInfo> srcColumLst) {
+	public int transferData(List<MappingInfo> srcColumLst) {
 		return dao.transferData(srcColumLst);
 		
 	}

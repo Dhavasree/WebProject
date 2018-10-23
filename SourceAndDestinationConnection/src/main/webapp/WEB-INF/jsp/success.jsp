@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Insert title here</title>
@@ -11,7 +13,15 @@
 <body>
 <div class="container">
 <h1 align="center">Successfully Completed</h1>
-${count}
+<table>
+<tr>SourceTable
+</table>
+${sourceTable}
+
+<c:forEach items = "${SourceTable}"  var = "list">
+  ${list}
+</c:forEach>
+${totalRecords}
 </div>
 </body>
 </html>

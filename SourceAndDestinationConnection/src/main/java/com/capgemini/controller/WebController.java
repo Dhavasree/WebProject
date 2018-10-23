@@ -33,6 +33,9 @@ public class WebController {
 	private static Connection SrcConnect=new Connection();
 	private static Connection DestConnect=new Connection();
 	private static int tableCount=0;
+	private static int totalRecords;
+	private List<String> srcTable= new ArrayList<String>();
+	private List<String> destTable = new ArrayList<String>();
 	@RequestMapping("/database")
 	public String databaseConnect(@RequestParam("selectSource")String selectSource,@RequestParam("selectDestination")String selectDestination)
 	{
@@ -73,7 +76,7 @@ public class WebController {
 			
 			 DestConnect.setDriverName("org.h2.Driver");
 			 DestConnect.setConnectionURL("jdbc:h2:tcp://localhost/~/test");
-	}
+	     }
 		else if(selectDestination.equals("Oracle"))
 		{
 			 DestConnect.setDriverName("");
@@ -218,6 +221,8 @@ public class WebController {
 		table1[tableCount].setDestSchema(table.getDestSchema());
 		table1[tableCount].setClause(table.getClause());
 		dataPump=copydata.initTable(table1);	
+		srcTable.add(table.getSourceTable());
+		destTable.add(table.getDestTable());
 		System.out.println("connection done");
 		srcColumLst=copydata.MetaData(dataPump,sourceCon,destCon,tableCount);
 		System.out.println("Table connection");
@@ -231,17 +236,20 @@ public class WebController {
 		dataPump=copydata.initColumn(column,tableCount);	
 		srcColumLst=copydata.overrideColumnMatch(true,dataPump,srcColumLst,tableCount);
 		srcColumLst=service.constructQueries(dataPump,srcColumLst,tableCount);
-		service.transferData(srcColumLst);
-		//service.closeConnection();
+		totalRecords=service.transferData(srcColumLst);
 		System.out.println("END ");
 		System.out.println("Total Tables"+dataPump.getTables().length);
 		tableCount++;
 		return new ModelAndView("table");
 	}
 	@RequestMapping("/closeConnection")
-	public ModelAndView closeFunction(@ModelAttribute("table") Table table)
+	public ModelAndView closeFunction()
 	{
 		ModelAndView model=new ModelAndView("success");
+		model.addObject("totalRecords", totalRecords);
+		System.out.println(srcTable);
+		model.addObject("SourceTable", srcTable);
+		model.addObject("destinationTable", destTable);
 		service.closeConnection();
 		tableCount=0;
 		return model;

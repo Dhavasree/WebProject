@@ -192,6 +192,7 @@ $(document).ready(function() {
 	 
 </div>
 </div>
+<h1 align="center">To Enter Table details...Click here</h1>
 <form action="table" id="table">
 	<div class="container" align="center" id="table">
 	<button type="submit" class="btn btn-success">Table</button>

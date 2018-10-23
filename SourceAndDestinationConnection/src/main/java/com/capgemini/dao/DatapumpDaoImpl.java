@@ -118,15 +118,15 @@ public class DatapumpDaoImpl implements DatapumpDao {
 	}
 
 	@Override
-	public String transferData(List<MappingInfo> srcColumLst) {
+	public int transferData(List<MappingInfo> srcColumLst) {
+		int flushCount = 0;
+		int totalCount = 0;
 		try {
 			List<MappingInfo> tmpLst = null;
 			MappingInfo mappingInfo = null;
 			PreparedStatement srcPstmt = sourceCon.prepareStatement(srcQuery);
 			PreparedStatement destPstmt = destCon.prepareStatement(destQuery);
-			int flushCount = 0;
-			int totalCount = 0;
-
+			
 			ResultSet srcRS = srcPstmt.executeQuery();
 			while (srcRS.next()) {
 				tmpLst = new ArrayList<MappingInfo>();
@@ -180,7 +180,7 @@ public class DatapumpDaoImpl implements DatapumpDao {
 		} catch (Exception e) {
 			System.err.print("Error: " + e.getMessage());
 		}
-		return null;
+		return totalCount;
 	}
 
 	private MappingInfo getInfo(String destColm, List<MappingInfo> lst) {
@@ -255,9 +255,4 @@ public class DatapumpDaoImpl implements DatapumpDao {
          System.out.println(list);
 		return list;
 	}
-
-	
-	
-	
-
 }

@@ -13,7 +13,7 @@ public interface DatapumpDao {
 
 	public List<MappingInfo> constructQueries(DataPump datapump, List<MappingInfo> srcColumLst,int tableCount);
 
-	public String transferData(List<MappingInfo> srcColumLst);
+	public int transferData(List<MappingInfo> srcColumLst);
 
 	public Exception sourceConnect(DataPump datapump);
 	

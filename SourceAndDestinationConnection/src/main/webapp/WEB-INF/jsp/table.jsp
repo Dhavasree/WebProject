@@ -37,7 +37,7 @@ $(document).ready(function() {
 	  $('#button').click(function(e) {
 		  e.preventDefault();
 		  columnFunction();
-		  $('#column').show();
+		//  $('#column').show();
 	  });
 	  $('#button2').click(function(e)
 			  {
@@ -58,6 +58,20 @@ function columnFunction() {
 				var columnname=new Array();
 				 columnname=response.colName;
 				 var arr=columnname.length;
+					if(arr<1)
+					{
+					alert("No Addition column in destination table");
+					var row='<tr><td><input type="text" name="destColumn" id="columnname" value="" readonly="true"/></td></tr>';
+					 $("#colAdd").append(row);
+					 $('#colAdd').hide();
+					var row1='<tr><td><input type="text" name="value" id="value"/></td></tr>';
+					 $('#colValue').append(row1);
+					 $('#colValue').hide();
+					
+					}
+					else
+						{
+						 $('#column').show();
 				for(var i=0;i<arr;i++)
 				 {
 					/* var row=' <input type="text" name="destColumn" id="'+columnname[i]+'" value="" />';
@@ -72,6 +86,8 @@ function columnFunction() {
 					 $('#colValue').append(row1);
 				// alert(arr);
 				 }
+						}
+			
 				
 			}
 			}
